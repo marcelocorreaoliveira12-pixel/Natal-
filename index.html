@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Amigo Oculto de Natal 🎁</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: url('https://images.unsplash.com/photo-1543589077-47d81606c1bf?auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+      background-size: cover;
+      text-align: center;
+      color: #fff;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px #000;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 5px;
+      border: none;
+      font-size: 1em;
+    }
+    input {
+      width: 250px;
+    }
+    button {
+      cursor: pointer;
+      background-color: #e63946;
+      color: #fff;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #d62828;
+    }
+    #lista {
+      margin-top: 20px;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎄 Amigo Oculto de Natal 🎁</h1>
+
+  <!-- Campo para adicionar nomes -->
+  <input type="text" id="nome" placeholder="Digite seu nome">
+  <button onclick="adicionarNome()">Adicionar</button>
+  <button onclick="sortear()">Sortear</button>
+
+  <div id="lista"></div>
+
+  <!-- Campo para consultar resultado -->
+  <h2>Consultar meu sorteio</h2>
+  <input type="text" id="consulta" placeholder="Digite seu nome">
+  <button onclick="mostrarResultado()">Ver meu amigo oculto</button>
+
+  <script>
+    let participantes = [];
+    let sorteio = {};
+
+    function adicionarNome() {
+      const nome = document.getElementById("nome").value.trim();
+      if (nome && !participantes.includes(nome)) {
+        participantes.push(nome);
+        document.getElementById("lista").innerHTML = 
+          "Participantes: " + participantes.join(", ");
+        document.getElementById("nome").value = "";
+      } else {
+        alert("Nome inválido ou já adicionado!");
+      }
+    }
+
+    function sortear() {
+      if (participantes.length < 2) {
+        alert("É preciso pelo menos 2 participantes para sortear!");
+        return;
+      }
+
+      let embaralhados = [...participantes].sort(() => Math.random() - 0.5);
+
+      // Garante que ninguém tire a si mesmo
+      for (let i = 0; i < participantes.length; i++) {
+        if (participantes[i] === embaralhados[i]) {
+          return sortear(); // refaz se alguém tirou a si mesmo
+        }
+      }
+
+      // Cria o mapa de resultados
+      for (let i = 0; i < participantes.length; i++) {
+        sorteio[participantes[i]] = embaralhados[i];
+      }
+
+      alert("Sorteio realizado com sucesso! Cada participante deve consultar seu resultado.");
+    }
+
+    function mostrarResultado() {
+      const nome = document.getElementById("consulta").value.trim();
+      if (sorteio[nome]) {
+        alert("🎁 " + nome + ", você tirou: " + sorteio[nome]);
+      } else {
+        alert("Nome não encontrado ou sorteio ainda não realizado.");
+      }
+    }
+  </script>
+</body>
+</html>
